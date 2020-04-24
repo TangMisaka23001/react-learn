@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom'
 import './index.css'
 
 class LikeButton extends Component {
+    // React.js 也提供了一种方式 defaultProps，可以方便的做到默认配置
+    static defaultProps = {
+        likedText: '取消',
+        unlikedText: '点赞'
+    }
+
     constructor() {
         super();
         this.state = {
@@ -14,30 +20,14 @@ class LikeButton extends Component {
         this.setState({
             isLiked: !this.state.isLiked
         })
-        // 通过函数调用 可以利用上一次 setState 结果进行运算
-        this.setState((prevState) => {
-            return { count: 0 }
-        })
-        this.setState((preState) => {
-            return {count: preState.count + 1}
-        })
-        this.setState((preState) => {
-            return {count: preState.count + 2}
-        })
-        /*
-        上面我们进行了三次 setState，但是实际上组件只会重新渲染一次，而不是三次；
-        这是因为在 React.js 内部会把 JavaScript 事件循环中的消息队列的
-        同一个消息中的 setState 都进行合并以后再重新渲染组件。
-         */
-        this.setState((preState) => {
-            console.log(preState.count)
-        })
     }
 
     render() {
         return (
             <button onClick={this.handleClickOnLikeButton.bind(this)}>
-                {this.state.isLiked ? '取消' : '点赞'} 👍 {this.state.count}
+                {this.state.isLiked
+                    ? this.props.likedText
+                    : this.props.unlikedText} 👍
             </button>
         )
     }
@@ -47,8 +37,9 @@ class LikeButton extends Component {
 class Index extends Component {
     render() {
         return (
+            // 在使用一个组件的时候，可以把参数放在标签的属性当中，所有的属性都会作为 props 对象的键值
             <div>
-                <LikeButton />
+                <LikeButton likedText='已赞' unlikedText='赞'/>
             </div>
         )
     }
