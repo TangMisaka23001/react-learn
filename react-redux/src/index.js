@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Header from './Header'
 import Content from './Content'
 import './index.css'
+import {Provider} from './connect'
 
 function createStore (reducer) {
     let state = null
@@ -32,26 +33,21 @@ const themeReducer = (state, action) => {
 const store = createStore(themeReducer)
 
 class Index extends Component {
-    static childContextTypes = {
-        store: PropTypes.object
-    }
 
-    getChildContext () {
-        return { store }
-    }
-
-    render () {
+    render() {
         return (
             <div>
-                <Header />
-                <Content />
+                <Header/>
+                <Content/>
             </div>
         )
     }
 }
 
+// 把 Provider 作为组件树的根节点
 ReactDOM.render(
-    <Index />,
+    <Provider store={store}>
+        <Index/>
+    </Provider>,
     document.getElementById('root')
 )
-
